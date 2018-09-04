@@ -4,6 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
     let counter =0
     let arrayElements = [];
     let couter=0
+    let majorArr=[]
+    let likeArr=[]
+    let dataArr=[]
+    let favouriteArr=[]
+    let historyArr=[]
+    let a=''
+    let b=''
+    let c=''
+    let d=''
 
     class Sort extends React.Component{
         constructor(props){
@@ -12,6 +21,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 likesArr:''
             }
         }
+
+
 
         clickDataArray=()=>{
             console.log('clik1')
@@ -29,9 +40,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return(
                 <div style={{width:'1000px'}}>
                     <p>Wybierz sposób sortowania || aby dodać do ulibionych klikij dwa razy</p>
-                    <div style={{display:this.props.display1}}>Sortowane wg ilosci lajków</div>
-                    <div style={{display:this.props.display2}}>Sortowane wg daty utworzenia</div>
-                    <div style={{display:this.props.display3}}> Plubione zadjęcia</div>
+                    <div style={{display:this.props.displayLike}}>Sortowane wg ilosci lajków</div>
+                    <div style={{display:this.props.displayData}}>Sortowane wg daty utworzenia</div>
+                    <div style={{display:this.props.displayFavourite}}> Plubione zadjęcia</div>
                     <button onClick={this.clickDataArray}>Data Utworzenia</button>
                     <button onClick={this.clickLikeArray}>Ilość polubień</button>
                     <button onClick={this.clikeFavouriteArray} >Ulubione</button>
@@ -66,11 +77,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     categoryClick = () => {
             this.props.stateNewKeyWord(this.state.currentValue);
-            this.props.clickDelateLike()
-            this.props.fetch()
-            this.props.clickMajorArray()
-            this.props.arrayPattern()
-            this.props.categoryClick()
+
+            this.props.categorylistonclikc()
 
         }
 
@@ -108,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 keyWord: 'dog',
                 ansewerArray: [],
                 answerFullArray: [],
-                categoriesList: [],
+                categoriesList: ['wybierz kategorie'],
                 likeArray: [],
                 displayMajor: 'block',
                 displayLike: 'none',
@@ -117,7 +125,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 displayMistake: 'none',
                 likeList: [],
                 likeValue: false,
-                likeClass: ''
+                likeClass: '',
+                historyArray:[],
+                majorArray:[],
+                dataArray:[],
+                likesArray:[],
+                favouriteArray:[],
+                a:'',
+                b:'',
+                c:'',
+                d:'',
+                displaydiv:'block',
+                displaydiv2:'none',
+                historyKey:''
 
 
             }
@@ -225,10 +245,10 @@ document.addEventListener('DOMContentLoaded', function() {
             let newArr = this.state.answerFullArray.map(a => {
                 return a
             })
-/*
-            console.log('newarr' , newArr)
-*/
-            return <div style={{display: this.state.display0}}>{newArr}</div>
+            console.log('major')
+                majorArr=<div style={{display: this.state.displayMajor}}>{newArr}</div>
+            return majorArr
+
         }
 
 
@@ -238,8 +258,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 return b.props.id - a.props.id
             })
-
-            return <div style={{display: this.state.display1}}>{newArr}</div>
+            likeArr=<div style={{display: this.state.displayLike}}>{newArr}</div>
+            return likeArr
         }
 
 
@@ -249,10 +269,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 return Number(b.props.data) - Number(a.props.data)
             })
-/*
-            console.log(newArr)
-*/
-            return <div style={{display: this.state.display2}}>{newArr}</div>
+            dataArr=<div style={{display: this.state.displayData}}>{newArr}</div>
+
+            return dataArr
         }
         favouriteArray = () => {
             let newArr = this.state.likeArray.slice()
@@ -266,11 +285,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     height: '200px'
                 }}></div>
             })
-/*
-            console.log(newArr)
-*/
-
-            return <div className='favourites' style={{display: this.state.display3}}>{newArr}</div>
+            favouriteArr=<div className='favourites' style={{display: this.state.displayFavourite}}>{newArr}</div>
+            return favouriteArr
         }
 
         categoryMistake = () => {
@@ -334,6 +350,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     })
                     this.state.ansewerArray=resp.results
                     this.arrayPattern()
+                    let newArr2=this.state.historyArray.slice()
+                    newArr2.push([this.state.keyWord,majorArr,likeArr,dataArr,favouriteArr])
+                    this.setState({
+                        historyArray:newArr2
+                    })
+
+
+                    console.log('historyArray',this.state.historyArray)
                 })
                 .catch(err => console.log(err))
 
@@ -359,17 +383,54 @@ document.addEventListener('DOMContentLoaded', function() {
             newArr = newArr.map(a => {
                 return <option>{a}</option>
             })
-            return <select>{newArr}</select>
+            return <select onChange={this.choiceHistory}>{newArr}</select>
+        }
+        choiceHistory=(e)=>{
+            this.setState({
+                historyKey:e.target.value
+            })
+            let a=document.querySelector('.new')
+            this.setState({
+                displaydiv:'none',
+                displaydiv2:'block'
+            })
+
+    }
+
+        pushMethod=()=>{
+            let newArr=this.state.historyArray.slice()
+            newArr.push([this.state.keyWord,majorArr,likeArr,dataArr,favouriteArr])
+            this.setState({
+                historyArray:newArr
+            })
+            console.log(this.state.historyArray)
         }
 
 
+        backHistory =()=>{
+            let a =document.querySelector('select')
+            a.value='wybierz kategorie'
+        }
+
+
+
         categorylistonclikc=()=>{
-        if (this.state.categoriesList.length == 0) {
+        if (this.state.categoriesList.length == 1) {
              let newArr = this.state.categoriesList.slice()
             newArr.push(this.state.keyWord)
             this.setState({
-                          categoriesList: newArr
-                      })
+                          categoriesList: newArr,
+                displaydiv2:'none',
+                displaydiv:'block'
+            })
+            this.clickDelateLike()
+            this.newFetch()
+            this.clickMajorArray()
+            this.arrayPattern()
+            this.categoryClick2()
+            this.backHistory()
+
+            console.log('historyArray',majorArr,likeArr,dataArr,favouriteArr)
 
                 }else
              {
@@ -385,14 +446,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 let newArr = this.state.categoriesList.slice()
                 newArr.push(this.state.keyWord)
                 this.setState({
-                    categoriesList: newArr
+                    categoriesList: newArr,
+                    displaydiv2:'none',
+                    displaydiv:'block'
+
                 })
+                this.clickDelateLike()
+                this.newFetch()
+                this.clickMajorArray()
+                this.arrayPattern()
+                this.categoryClick2()
+                this.backHistory()
+
+
+                console.log('historyArray',majorArr,likeArr,dataArr,favouriteArr)
             }else {
-                this.categoryClick()
+                this.categoryMistake()
             }
         }
 
     }
+
 
 
 
@@ -401,18 +475,25 @@ document.addEventListener('DOMContentLoaded', function() {
             return (
                 <div style={{width: '1000px', margin: '0px auto'}}>
 
-                    <button onClick={this.categorylistonclikc}>zapisz</button>
                     <div>Historia Wyszukiwania</div>
                     {this.category()}
-                    <div style={{display: this.state.display4, color: 'red'}}>Bład! Ta kategoria została już zapisana
+                    <div style={{display: this.state.displayMistake, color: 'red'}}>Bład! Ta kategoria została już zapisana
                     </div>
-                    <Sort clikeFavouriteArray={this.clikeFavouriteArray} clickLikeArray={this.clickLikeArray} display1={this.state.display1}
-                          display2={this.state.display2} display3={this.state.display3} clickDataArray={this.clickDataArray}/>
+                    <Sort clikeFavouriteArray={this.clikeFavouriteArray} clickLikeArray={this.clickLikeArray} displayLike={this.state.displayLike}
+                          displayData={this.state.displayData} displayFavourite={this.state.displayFavourite} clickDataArray={this.clickDataArray}/>
+                    <div style={{display:this.state.displaydiv}}>
                     {this.majorArray()}
                     {this.likeArray()}
                     {this.dataArray()}
                     {this.favouriteArray()}
-                    <Input clickDelateLike={this.clickDelateLike}  arrayPattern={this.arrayPattern}
+
+                    </div>
+                    <div style={{display:this.state.displaydiv2}}>
+                        Tu powinna pokazywać się historia
+                    </div>
+
+                    <Input categorylistonclikc={this.categorylistonclikc}
+                        clickDelateLike={this.clickDelateLike}  arrayPattern={this.arrayPattern}
                            clickMajorArray={this.clickMajorArray}   fetch={this.newFetch}
                            stateNewKeyWord={this.stateNewKeyWord}
                            categoryClick={this.categoryClick2}
