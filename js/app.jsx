@@ -467,8 +467,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
     }
 
+    aa=()=>{
+            let div=''
+            this.state.historyArray.forEach(a=>{
+                if(a[0]==this.state.historyKey){
+                    div= a[1]
+                }
+            })
+        return div
 
-
+    }
+    bb=()=>{
+        let div=''
+        this.state.historyArray.forEach(a=>{
+            if(a[0]==this.state.historyKey){
+                div= a[2]
+            }
+        })
+        return div
+    }
+        cc=()=>{
+            let div=''
+            this.state.historyArray.forEach(a=>{
+                if(a[0]==this.state.historyKey){
+                    div= a[3]
+                }
+            })
+            return div
+        }
+        dd=()=>{
+            let div=''
+            this.state.historyArray.forEach(a=>{
+                if(a[0]==this.state.historyKey){
+                    div= a[4]
+                }
+            })
+            return div
+        }
 
         render() {
 
@@ -489,7 +524,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     </div>
                     <div style={{display:this.state.displaydiv2}}>
-                        Tu powinna pokazywać się historia
+                        {this.aa()}
+                        {this.bb()}
+                        {this.cc()}
+                        {this.dd()}
                     </div>
 
                     <Input categorylistonclikc={this.categorylistonclikc}
