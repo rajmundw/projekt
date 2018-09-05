@@ -505,7 +505,13 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             return <div style={{display: this.state.displayFavourite}}>{div}</div>
         }
+        componentWillUpdate (){
+        let newArr2=this.state.historyArray.slice()
+        newArr2.push([this.state.keyWord,majorArr,likeArr,dataArr,favouriteArr])
+                          this.state.historyArray=newArr2
 
+        console.log(this.state.historyArray)
+    }
         render() {
 
             return (
