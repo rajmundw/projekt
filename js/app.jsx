@@ -471,38 +471,39 @@ document.addEventListener('DOMContentLoaded', function() {
             let div=''
             this.state.historyArray.forEach(a=>{
                 if(a[0]==this.state.historyKey){
-                    div= a[1]
+                    div= a[1].props.children
+
                 }
             })
-        return div
+        return <div style={{display: this.state.displayMajor}}>{div}</div>
 
     }
     bb=()=>{
         let div=''
         this.state.historyArray.forEach(a=>{
             if(a[0]==this.state.historyKey){
-                div= a[2]
+                div= a[2].props.children
             }
         })
-        return div
+        return <div style={{display: this.state.displayLike}}>{div}</div>
     }
         cc=()=>{
             let div=''
             this.state.historyArray.forEach(a=>{
                 if(a[0]==this.state.historyKey){
-                    div= a[3]
+                    div= a[3].props.children
                 }
             })
-            return div
+            return <div style={{display: this.state.displayData}}>{div}</div>
         }
         dd=()=>{
             let div=''
             this.state.historyArray.forEach(a=>{
                 if(a[0]==this.state.historyKey){
-                    div= a[4]
+                    div= a[4].props.children
                 }
             })
-            return div
+            return <div style={{display: this.state.displayFavourite}}>{div}</div>
         }
 
         render() {
