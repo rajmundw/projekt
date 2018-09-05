@@ -137,7 +137,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 d:'',
                 displaydiv:'block',
                 displaydiv2:'none',
-                historyKey:''
+                historyKey:'',
+                aa:'',
+                bb:'',
 
 
             }
@@ -245,8 +247,8 @@ document.addEventListener('DOMContentLoaded', function() {
             let newArr = this.state.answerFullArray.map(a => {
                 return a
             })
-            console.log('major')
-                majorArr=<div style={{display: this.state.displayMajor}}>{newArr}</div>
+            console.log('major',majorArr)
+                majorArr=<div data-type="major" style={{display: this.state.displayMajor}}>{newArr}</div>
             return majorArr
 
         }
@@ -258,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 return b.props.id - a.props.id
             })
-            likeArr=<div style={{display: this.state.displayLike}}>{newArr}</div>
+            likeArr=<div data-type="like" style={{display: this.state.displayLike}}>{newArr}</div>
             return likeArr
         }
 
@@ -269,7 +271,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 return Number(b.props.data) - Number(a.props.data)
             })
-            dataArr=<div style={{display: this.state.displayData}}>{newArr}</div>
+            dataArr=<div data-type="data" style={{display: this.state.displayData}}>{newArr}</div>
 
             return dataArr
         }
@@ -285,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     height: '200px'
                 }}></div>
             })
-            favouriteArr=<div className='favourites' style={{display: this.state.displayFavourite}}>{newArr}</div>
+            favouriteArr=<div data-type="favourite" className='favourites' style={{display: this.state.displayFavourite}}>{newArr}</div>
             return favouriteArr
         }
 
@@ -349,12 +351,9 @@ document.addEventListener('DOMContentLoaded', function() {
                         ansewerArray: resp.results
                     })
                     this.state.ansewerArray=resp.results
+
                     this.arrayPattern()
-                    let newArr2=this.state.historyArray.slice()
-                    newArr2.push([this.state.keyWord,majorArr,likeArr,dataArr,favouriteArr])
-                    this.setState({
-                        historyArray:newArr2
-                    })
+
 
 
                     console.log('historyArray',this.state.historyArray)
@@ -374,6 +373,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 let a = document.querySelectorAll('.like')
                 a.forEach(a => {
                     a.className = ''
+                    a.dataset.like='false'
                 })
         }
 
@@ -389,22 +389,22 @@ document.addEventListener('DOMContentLoaded', function() {
             this.setState({
                 historyKey:e.target.value
             })
+            {this.aa()}
+            {this.bb()}
+            {this.cc()}
+            {this.dd()}
+            this.state.historyKey=e.target.value
+            console.log('choice',e.target.value)
+            console.log('choice',this.state.historyKey)
+            this.state.displayMistake='none'
             let a=document.querySelector('.new')
             this.setState({
                 displaydiv:'none',
                 displaydiv2:'block'
             })
-
+this.backHistory()
     }
 
-        pushMethod=()=>{
-            let newArr=this.state.historyArray.slice()
-            newArr.push([this.state.keyWord,majorArr,likeArr,dataArr,favouriteArr])
-            this.setState({
-                historyArray:newArr
-            })
-            console.log(this.state.historyArray)
-        }
 
 
         backHistory =()=>{
@@ -430,13 +430,11 @@ document.addEventListener('DOMContentLoaded', function() {
             this.categoryClick2()
             this.backHistory()
 
-            console.log('historyArray',majorArr,likeArr,dataArr,favouriteArr)
 
                 }else
              {
 
         let newArr = this.state.categoriesList.slice()
-        console.log(this.state.keyWord)
         let counter=0;
         newArr.forEach(a => {
             if (a == this.state.keyWord) {
@@ -458,8 +456,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.categoryClick2()
                 this.backHistory()
 
-
-                console.log('historyArray',majorArr,likeArr,dataArr,favouriteArr)
             }else {
                 this.categoryMistake()
             }
@@ -469,49 +465,231 @@ document.addEventListener('DOMContentLoaded', function() {
 
     aa=()=>{
             let div=''
-            this.state.historyArray.forEach(a=>{
-                if(a[0]==this.state.historyKey){
-                    div= a[1].props.children
+        let newArr=[]
+
+            this.state.historyArray.forEach((a,b)=> {
+                if (a[0] == this.state.historyKey) {
+
+                    let newArr2=[]
+
+                    for (let i = 0; i <a[1].length ; i++) {
+                      newArr2[i]=a[1][i]
+
+                    }
+                    console.log['ddd',newArr2]
+                    newArr=newArr2.map(c=>{
+
+                        return <div  data-c={c[0]}
+                                    data-like={c[1]}
+                                    data-b={c[2]}
+                                    data-a={c[3]}
+                                    id={c[4]}
+                                    data={c[5]}
+                                    className={c[6]}
+                                    style={{
+
+                            float: 'left',
+                            backgroundImage: `url("${c[2]}")`,
+                            backgroundSize: 'cover',
+                            width: '200px',
+                            height: '200px'
+                        }}></div>
+                    })
+                    console.log('aaArray',newArr)
 
                 }
+
             })
-        return <div style={{display: this.state.displayMajor}}>{div}</div>
+
+        return <div  style={{display: this.state.displayMajor}}>{newArr}</div>
 
     }
+
     bb=()=>{
         let div=''
-        this.state.historyArray.forEach(a=>{
-            if(a[0]==this.state.historyKey){
-                div= a[2].props.children
+        let newArr=[]
+        this.state.historyArray.forEach((a,b)=> {
+            if (a[0] == this.state.historyKey) {
+
+                let newArr2=[]
+
+                for (let i = 0; i <a[1].length ; i++) {
+                    newArr2[i]=a[2][i]
+
+                }
+
+                newArr=newArr2.map(c=>{
+
+                    return <div
+                        data-c={c[0]}
+                                data-like={c[1]}
+                                data-b={c[2]}
+                                data-a={c[3]}
+                                id={c[4]}
+                                data={c[5]}
+                                className={c[6]}
+                                style={{
+
+                                    float: 'left',
+                                    backgroundImage: `url("${c[2]}")`,
+                                    backgroundSize: 'cover',
+                                    width: '200px',
+                                    height: '200px'
+                                }}></div>
+                })
+
             }
+
         })
-        return <div style={{display: this.state.displayLike}}>{div}</div>
+        return <div style={{display: this.state.displayLike}}>{newArr}</div>
     }
         cc=()=>{
             let div=''
-            this.state.historyArray.forEach(a=>{
-                if(a[0]==this.state.historyKey){
-                    div= a[3].props.children
+            let newArr=[]
+            this.state.historyArray.forEach((a,b)=> {
+                if (a[0] == this.state.historyKey) {
+
+                    let newArr2=[]
+
+                    for (let i = 0; i <a[3].length ; i++) {
+                        newArr2[i]=a[3][i]
+
+                    }
+
+                    newArr=newArr2.map(c=>{
+
+                        return <div
+                                    data-c={c[0]}
+                                    data-like={c[1]}
+                                    data-b={c[2]}
+                                    data-a={c[3]}
+                                    id={c[4]}
+                                    data={c[5]}
+                                    className={c[6]}
+                                    style={{
+
+                                        float: 'left',
+                                        backgroundImage: `url("${c[2]}")`,
+                                        backgroundSize: 'cover',
+                                        width: '200px',
+                                        height: '200px'
+                                    }}></div>
+                    })
+
                 }
+
             })
-            return <div style={{display: this.state.displayData}}>{div}</div>
+            return <div  style={{display: this.state.displayData}}>{newArr}</div>
         }
         dd=()=>{
             let div=''
-            this.state.historyArray.forEach(a=>{
-                if(a[0]==this.state.historyKey){
-                    div= a[4].props.children
-                }
-            })
-            return <div style={{display: this.state.displayFavourite}}>{div}</div>
-        }
-        componentWillUpdate (){
-        let newArr2=this.state.historyArray.slice()
-        newArr2.push([this.state.keyWord,majorArr,likeArr,dataArr,favouriteArr])
-                          this.state.historyArray=newArr2
+            let newArr=[]
+            this.state.historyArray.forEach((a,b)=> {
+                if (a[0] == this.state.historyKey) {
 
-        console.log(this.state.historyArray)
+                    let newArr2=[]
+
+                    for (let i = 0; i <a[4].length ; i++) {
+                        newArr2[i]=a[4][i]
+
+                    }
+
+                    newArr=newArr2.map(c=>{
+
+                        return <div
+                                    data-c={c[0]}
+                                    data-b={c[1]}
+                                    data-a={c[2]}
+                                    className='like'
+
+
+                                    style={{
+
+                                        float: 'left',
+                                        backgroundImage: `url("${c[1]}")`,
+                                        backgroundSize: 'cover',
+                                        width: '200px',
+                                        height: '200px'
+                                    }}></div>
+                    })
+
+                }
+
+            })
+            return <div  style={{display: this.state.displayFavourite}}>{newArr}</div>
+        }
+        componentDidUpdate (){
+
+        let newArr2=this.state.historyArray.filter((item) => {
+                if(item[0] != this.state.keyWord){
+                    return item
+            }
+            })
+            console.log('query',document.querySelector(`[data-type="major"]`).children)
+            let a=document.querySelector(`[data-type="major"]`).children
+            let b=document.querySelector(`div[data-type="like"]`).children
+            let c=document.querySelector(`div[data-type="data"]`).children
+            let d=document.querySelector(`div[data-type="favourite"]`).children
+            let aArray=[]
+            for (let i = 0; i <a.length ; i++) {
+
+
+                aArray[i]=[a[i].attributes[0].value, a[i].attributes[1].value, a[i].attributes[2].value, a[i].attributes[3].value, a[i].attributes[4].value,
+                    a[i].attributes[5].value, a[i].attributes[6].value]
+            }
+            let bArray=[]
+            for (let i = 0; i <b.length ; i++) {
+
+
+                bArray[i]=[b[i].attributes[0].value, b[i].attributes[1].value, b[i].attributes[2].value, b[i].attributes[3].value, b[i].attributes[4].value,
+                    b[i].attributes[5].value, b[i].attributes[6].value]
+            }
+            let cArray=[]
+            for (let i = 0; i <c.length ; i++) {
+
+
+                cArray[i]=[c[i].attributes[0].value, c[i].attributes[1].value, c[i].attributes[2].value, c[i].attributes[3].value, c[i].attributes[4].value,
+                    c[i].attributes[5].value, c[i].attributes[6].value]
+            }
+            let dArray=[]
+            for (let i = 0; i <d.length ; i++) {
+
+
+                dArray[i]=[d[i].attributes[0].value, d[i].attributes[1].value, d[i].attributes[2].value, d[i].attributes[3].value, d[i].attributes[4].value]
+            }
+            console.log(aArray)
+            newArr2.push([this.state.keyWord,aArray,bArray,cArray,dArray])
+            this.state.historyArray=newArr2
+            console.log('newArr2',newArr2,this.state.keyWord)
+            console.log('history',this.state.historyArray)
+
+
     }
+        likeClickHistory = (e) => {
+            if (e.target.dataset.like == 'false') {
+
+
+                let a = e.target.dataset.a
+                let c = e.target.dataset.b
+                let array = [a, c]
+                let b = document.querySelectorAll(`[data-a="${a}"`)
+                b.forEach(a => {
+                    a.className = 'like'
+                    a.dataset.like = 'true'
+                })
+               } else {
+
+                let a = e.target.dataset.a
+                let b = document.querySelectorAll(`[data-a="${a}"`)
+                b.forEach(a => {
+                    a.className = ''
+                    a.dataset.like = 'false'
+                })
+
+
+            }
+        }
+
         render() {
 
             return (
@@ -523,14 +701,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     </div>
                     <Sort clikeFavouriteArray={this.clikeFavouriteArray} clickLikeArray={this.clickLikeArray} displayLike={this.state.displayLike}
                           displayData={this.state.displayData} displayFavourite={this.state.displayFavourite} clickDataArray={this.clickDataArray}/>
-                    <div style={{display:this.state.displaydiv}}>
+                    <div className="div" style={{display:this.state.displaydiv}}>
                     {this.majorArray()}
                     {this.likeArray()}
                     {this.dataArray()}
                     {this.favouriteArray()}
 
                     </div>
-                    <div style={{display:this.state.displaydiv2}}>
+                    <div className="history, div" style={{display:this.state.displaydiv2}}>
                         {this.aa()}
                         {this.bb()}
                         {this.cc()}
